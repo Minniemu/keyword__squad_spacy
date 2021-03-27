@@ -1,2 +1,2 @@
 # keyword__squad_spacy
-考眼
+考眼生成

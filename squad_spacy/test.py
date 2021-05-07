@@ -53,6 +53,7 @@ class detokenizer:
 import pandas as pd
 import numpy as np
 from tqdm import tqdm, trange
+from time import sleep
 #Load the data
 import joblib
 data = pd.read_csv("result2.csv", encoding="latin1").fillna(method="ffill")
@@ -110,13 +111,15 @@ articles = []
 result = []
 #articles['version'] = 2.0
 #articles['data'] = []
-with open('article.json') as readfile:
+with open('article_dev.json') as readfile:
     
     read = json.load(readfile)
     data = read['data']
-    for i in range(0,50):
+    for i in tqdm(range(len(data)-1)):
         d = data[i]
         test_sentence = d['article']
+        if len(test_sentence) > 512:
+            test_sentence = test_sentence[:512]
         #articles.append(d['article'])
         
         tokenized_sentence = tokenizer.encode(test_sentence)
@@ -146,7 +149,7 @@ with open('article.json') as readfile:
         dt = detokenizer()                     
 
         for i in range(0,len(new_tokens)):
-            print("Sentence num = ",sen_num)
+            #print("Sentence num = ",sen_num)
             sen_num += 1
 
             if new_labels[i] == 'A':
@@ -166,5 +169,5 @@ with open('article.json') as readfile:
                     result.append(a)
                     print("\n") 
 #print("result",result)
-with open('qg_data.json','w') as writefile:
+with open('qg_data_dev.json','w') as writefile:
     json.dump(result,writefile)
